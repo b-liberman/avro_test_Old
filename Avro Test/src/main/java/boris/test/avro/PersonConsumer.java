@@ -1,41 +1,32 @@
 package boris.test.avro;
 
-import java.util.Map;
-import java.util.Properties;
-
-import org.apache.kafka.streams.KafkaStreams;
-import org.apache.kafka.streams.StreamsBuilder;
+import org.apache.kafka.streams.kstream.KStream;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.kafka.core.StreamsBuilderFactoryBean;
 import org.springframework.stereotype.Component;
 
 import boris.test.avro.domain.Person;
 
-
+@Component
 public class PersonConsumer implements ApplicationRunner {
 
 	@Autowired
-	@Value("#{streamsConfigs}")
-	private Map<String, Object> streamsConfigs;
-
-	@Value("${avroTest.kafka.topic}")
-	private String topic;
+	private KStream<String, Person> personKStream;
+	
+	@Autowired()
+	@Qualifier("&kStreamBuilder")
+	private StreamsBuilderFactoryBean kStreamBuilderFactoryBean;
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-
-		StreamsBuilder builder = new StreamsBuilder();
-		builder.<String, Person>stream(topic).foreach((k, v) -> {
+		
+		personKStream.foreach((k, v) -> {
 			System.out.println("&&&&&&&&&&&&&&&& " + k + ":" + v.getAge());
 		});
-		
-		final Properties props = new Properties();
-		streamsConfigs.keySet().stream().forEach(k -> props.put(k, streamsConfigs.get(k)));
-		
-		KafkaStreams streams = new KafkaStreams(builder.build(), props);
-		streams.start();
+		kStreamBuilderFactoryBean.start();
 	}
 
 }

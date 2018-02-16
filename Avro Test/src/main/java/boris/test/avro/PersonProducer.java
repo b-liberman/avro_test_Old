@@ -1,7 +1,5 @@
 package boris.test.avro;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -29,16 +27,7 @@ public class PersonProducer {
 	@Scheduled(fixedDelay = 3000)
 	private void producePersonRecord() {
 		Person person = Person.newBuilder().setAge(35).setName("name123").setTags(Arrays.asList("t1", "t2", "t3"))
-				.build();
-		
-		try {
-			person.writeExternal(new ObjectOutputStream(System.out));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
+				.build();		
 		final ProducerRecord<String, Person> record = new ProducerRecord<String, Person>(topic, "key" + UUID.randomUUID(), person);
 		ListenableFuture<SendResult<String, Person>> future = kafkaPersonTemplate.send(record);
 	    future.addCallback(new ListenableFutureCallback<SendResult<String, Person>>() {

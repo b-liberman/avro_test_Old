@@ -81,16 +81,14 @@ public class KafkaConfig {
 	}
 
 	@Bean
-	public FactoryBean<StreamsBuilder> kStreamBuilder() {
-		return new StreamsBuilderFactoryBean(kStreamsConfigs());
+	public StreamsBuilderFactoryBean kStreamBuilder() {
+		StreamsBuilderFactoryBean streamsBuilderFactoryBean = new StreamsBuilderFactoryBean(kStreamsConfigs());
+		streamsBuilderFactoryBean.setAutoStartup(false);
+		return streamsBuilderFactoryBean;
 	}
 
 	@Bean
-	public KStream<String, Person> kStream() throws Exception {
-		KStream<String, Person> stream = kStreamBuilder().getObject().stream(topic);
-		stream.foreach((k, v) -> {
-			System.out.println("&&&&&&&&&&&&&&&& " + k + ":" + v.getAge());
-		});
-		return stream;
+	public KStream<String, Person> personKStream() throws Exception {
+		return  kStreamBuilder().getObject().stream(topic);
 	}
 }
