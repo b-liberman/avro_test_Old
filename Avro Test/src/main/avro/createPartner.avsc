@@ -1,0 +1,206 @@
+{
+	 "type": "record",
+	 "name": "update_request",
+	 "fields": [
+		{
+			 "name": "common",
+			 "type": {
+				 "type": "array",
+				 "items": {
+					 "type": "record",
+					 "name": "common_type",
+					 "fields": [
+						{
+							 "type": "string",
+							 "name": "event"
+						},
+						{
+							 "type": "string",
+							 "name": "golden_record"
+						},
+						{
+							 "type": "string",
+							 "name": "party_key"
+						},
+						{
+							 "type": "string",
+							 "name": "id"
+						},
+						{
+							 "type": "string",
+							 "name": "timestamp"
+						},
+						{
+							 "type": "int",
+							 "name": "expiry"
+						}
+					]
+				}
+			}
+		},
+		{
+			 "name": "payload",
+			 "type": {
+				 "type": "array",
+				 "items": {
+					 "type": "record",
+					 "name": "payload_type",
+					 "fields": [
+						{
+							 "name": "party",
+							 "type": {
+								 "type": "array",
+								 "items": {
+									 "type": "record",
+									 "name": "party_type",
+									 "fields": [
+										{
+											 "name": "salutation",
+											 "type": "int"
+										},
+										{
+											 "name": "nobility_predicate",
+											 "type": "string"
+										},
+										{
+											 "name": "title",
+											 "type": "string"
+										},
+										{
+											 "name": "last_name",
+											 "type": "string"
+										},
+										{
+											 "name": "first_name",
+											 "type": "string"
+										},
+										{
+											 "name": "legal_person",
+											 "type": "int"
+										},
+										{
+											 "name": "date_birth_year",
+											 "type": "int"
+										},
+										{
+											 "name": "date_birth_month",
+											 "type": "int"
+										},
+										{
+											 "name": "date_birth_day",
+											 "type": "int"
+										},
+										{
+											 "name": "date_death",
+											 "type": "string"
+										},
+										{
+											 "name": "client",
+											 "type": "int"
+										}
+									]
+								}
+							}
+						},
+						{
+							 "name": "communication",
+							 "type": {
+								 "type": "array",
+								 "items": {
+									 "type": "record",
+									 "name": "comm_type",
+									 "fields": [
+										{
+											 "name": "channel",
+											 "type": "string"
+										},
+										{
+											 "name": "type",
+											 "type": "string"
+										},
+										{
+											 "name": "Verification",
+											 "type": "string"
+										},
+										{
+											 "name": "international_code",
+											 "type": "string"
+										},
+										{
+											 "name": "area_code",
+											 "type": "string"
+										},
+										{
+											 "name": "phone_numnber",
+											 "type": "string"
+										},
+										{
+											 "name": "address",
+											 "type": "string"
+										}
+									]
+								}
+							}
+						},
+						{
+							 "name": "address",
+							 "type": {
+								 "type": "array",
+								 "items": {
+									 "type": "record",
+									 "name": "address_type",
+									 "fields": [
+										{
+											 "type": "int",
+											 "name": "delivery_address"
+										},
+										{
+											 "type": "string",
+											 "name": "country"
+										},
+										{
+											 "type": "int",
+											 "name": "type"
+										},
+										{
+											 "type": "string",
+											 "name": "postal_code"
+										},
+										{
+											 "type": "string",
+											 "name": "city"
+										},
+										{
+											 "type": "string",
+											 "name": "street"
+										},
+										{
+											 "type": "string",
+											 "name": "house_number"
+										},
+										{
+											 "type": "string",
+											 "name": "number_extension"
+										},
+										{
+											 "type": "string",
+											 "name": "postbox"
+										},
+										{
+											 "type": "string",
+											 "name": "suplement"
+										},
+										{
+											 "type": "int",
+											 "name": "investigation"
+										}
+									]
+								}
+							}
+						}
+					]
+				}
+			}
+		}
+	]
+}
