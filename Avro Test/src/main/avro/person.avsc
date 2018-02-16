@@ -1,0 +1,11 @@
+{"namespace": "boris.test.avro.domain",
+  "type": "record",
+  "name": "Person",
+  "doc" : "Person for a test",
+  "fields": [
+    {"name": "age",  "type": "int", "default": 10},
+    {"name": "name", "type": "string", "doc": "the persons name"},
+    {"name": "tags", "default":[], "type":{"type": "array", "items": "string"}}
+  ]
+  
+}

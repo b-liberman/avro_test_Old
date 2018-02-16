@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: AvroTest
+
+avroTest:
+  kafka:
+    bootstrapServers: localhost:29092
+    zkServers: localhost:32181
+    schemaRegistry: http://localhost:8081
+    topic: borisTest
+    streams:
+      applicationId: avroTest1
