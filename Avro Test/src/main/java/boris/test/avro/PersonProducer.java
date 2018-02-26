@@ -36,11 +36,6 @@ public class PersonProducer {
 				.setOptField("my opt opt opt")
 				.setAddress(AddressUSRecord.newBuilder().build())
 				.build();
-//		Person person = new Person();
-//		person.setAge(35);
-//		person.setName("name345");
-//		person.setTags(Arrays.asList("t1", "t2", "t3"));
-//		person.setOptField("my opt field");
 
 //		logRecord(person);
 

@@ -3,13 +3,12 @@ package boris.test.avro;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.avro.generic.GenericRecord;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.serialization.StringSerializer;
-import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.KStream;
-import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +21,7 @@ import org.springframework.kafka.core.StreamsBuilderFactoryBean;
 import boris.test.avro.domain.Person;
 import io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
-import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
+import io.confluent.kafka.streams.serdes.avro.GenericAvroSerde;
 
 @Configuration
 @EnableKafka
@@ -71,7 +70,8 @@ public class KafkaConfig {
 		streamsConfiguration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaBootstrapServers);
 		streamsConfiguration.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistry);
 		streamsConfiguration.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
-		streamsConfiguration.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, SpecificAvroSerde.class);
+//		streamsConfiguration.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, SpecificAvroSerde.class);
+		streamsConfiguration.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, GenericAvroSerde.class);
 		return streamsConfiguration;
 	}
 
@@ -87,8 +87,13 @@ public class KafkaConfig {
 		return streamsBuilderFactoryBean;
 	}
 
+//	@Bean
+//	public KStream<String, Person> personKStream() throws Exception {
+//		return  kStreamBuilder().getObject().stream(topic);
+//	}
+	
 	@Bean
-	public KStream<String, Person> personKStream() throws Exception {
+	public KStream<String, GenericRecord> personKStream() throws Exception {
 		return  kStreamBuilder().getObject().stream(topic);
 	}
 }
