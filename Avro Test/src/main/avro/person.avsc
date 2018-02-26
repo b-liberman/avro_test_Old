@@ -1,11 +1,62 @@
-{"namespace": "boris.test.avro.domain",
-  "type": "record",
-  "name": "Person",
-  "doc" : "Person for a test",
-  "fields": [
-    {"name": "age",  "type": "int", "default": 10},
-    {"name": "name", "type": "string", "doc": "the persons name"},
-    {"name": "tags", "default":[], "type":{"type": "array", "items": "string"}}
-  ]
-  
+{
+	"namespace": "boris.test.avro.domain",
+	"type": "record",
+	"name": "Person",
+	"doc": "Person for a test",
+	"fields": [
+		{
+			"name": "age",
+			"type": "int",
+			"default": 12341
+		},
+		{
+			"name": "name",
+			"type": "string",
+			"doc": "the persons name"
+		},
+		{
+			"name": "tags",
+			"default": [
+			],
+			"type": {
+				"type": "array",
+				"items": "string"
+			}
+		},
+		{
+			"name": "optField",
+			"type": ["string", "null"],
+			"default": "optoptopt",
+			"doc": "the new opt field"
+		},
+		{
+			"name": "newOptField",
+			"type": "string",
+			"default": "123opt321",
+			"doc": "the new default field"
+		},
+		{
+			"name": "address",
+			"default": null,
+			"type": [				
+				{
+					"namespace": "boris.test.avro.domain",
+					"type": "record",
+					"name": "AddressUSRecord",
+					"fields": [
+						{
+							"name": "streetaddress",
+							"type": "string",
+							"default": "street123"
+						},
+						{
+							"name": "city",
+							"type": "string",
+							"default": "city321"
+						}
+					]
+				}, "null"
+			]
+		}
+	]
 }

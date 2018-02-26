@@ -24,7 +24,7 @@ public class PersonConsumer implements ApplicationRunner {
 	public void run(ApplicationArguments args) throws Exception {
 		
 		personKStream.foreach((k, v) -> {
-			System.out.println("&&&&&&&&&&&&&&&& " + k + ":" + v.getAge());
+			System.out.println("&&&&&&&&&&&&&&&& " + k + ":" + v.getAge() + ":" + v.getNewOptField() + ":" + v.getAddress().getCity());
 		});
 		kStreamBuilderFactoryBean.start();
 	}
