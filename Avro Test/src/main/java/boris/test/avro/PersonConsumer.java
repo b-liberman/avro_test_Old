@@ -25,7 +25,7 @@ public class PersonConsumer implements ApplicationRunner {
 		
 		personKStream.foreach((k, v) -> {
 //			System.out.println("&&&&&&&&&&&&&&&& " + k + ":" + v.getAge() + ":" + v.getNewOptField() + ":" + v.getAddress().getCity());
-			System.out.println("&&&&&&&&&&&&&&&& " + k + ":" + v.get("address"));
+			System.out.println("&&&&&&&&&&&&&&&& " + k + ":" + ((GenericRecord)v.get("address")).get("city"));
 		});
 		kStreamBuilderFactoryBean.start();
 	}
