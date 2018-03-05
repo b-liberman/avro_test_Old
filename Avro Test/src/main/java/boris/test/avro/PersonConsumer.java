@@ -8,24 +8,32 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.kafka.core.StreamsBuilderFactoryBean;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Component
 public class PersonConsumer implements ApplicationRunner {
 
 	@Autowired
 	private KStream<String, GenericRecord> personKStream;
-//	private KStream<String, Person> personKStream;
-	
-	@Autowired()
+	// private KStream<String, Person> personKStream;
+
+	@Autowired
 	@Qualifier("&kStreamBuilder")
 	private StreamsBuilderFactoryBean kStreamBuilderFactoryBean;
 
+	@Autowired
+	private WebClient webClient;
+
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		
+
 		personKStream.foreach((k, v) -> {
-//			System.out.println("&&&&&&&&&&&&&&&& " + k + ":" + v.getAge() + ":" + v.getNewOptField() + ":" + v.getAddress().getCity());
-			System.out.println("&&&&&&&&&&&&&&&& " + k + ":" + ((GenericRecord)v.get("address")).get("city"));
+			// System.out.println("&&&&&&&&&&&&&&&& " + k + ":" + v.getAge() + ":" +
+			// v.getNewOptField() + ":" + v.getAddress().getCity());
+			Object city = ((GenericRecord) v.get("address")).get("city");
+			System.out.println("&&&&&&&&&&&&&&&& " + k + ":" + city);
+			webClient.get().uri("/mock/{id}", city).exchange().subscribe(response -> response.bodyToMono(String.class)
+					.subscribe(str -> System.out.println("------ " + str)));
 		});
 		kStreamBuilderFactoryBean.start();
 	}
