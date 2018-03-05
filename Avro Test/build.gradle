@@ -33,6 +33,35 @@ repositories {
 	maven { url "http://packages.confluent.io/maven/" }	
 }
 
+sourceSets {
+    main {
+        java {
+	        srcDirs += ['build/generated-main-avro-java']
+        }
+    }
+}
+
+
+eclipse {
+    classpath {
+        file.whenMerged { classpath ->
+            def iterator = classpath.entries.iterator()
+            while(iterator.hasNext()) {
+            	def cpe = iterator.next()
+            	if(cpe instanceof org.gradle.plugins.ide.eclipse.model.SourceFolder) {
+            		if(cpe.path.contains('test/java')) {
+	            		cpe.setOutput('build/classes/java/test/')
+	            	} else if(cpe.path.contains('main/resources')) {
+	            		cpe.setOutput('build/resources/main/')
+	            	} else {
+	            		cpe.setOutput('build/classes/java/main/')
+	            	}
+            		println cpe
+            	}
+            }
+        }
+    }
+}
 
 dependencies {
 
@@ -44,7 +73,9 @@ dependencies {
 
 	compile (
 		"org.springframework.boot:spring-boot-starter-actuator",
-		"org.springframework.kafka:spring-kafka:${springKafkaVersion}",
+		"org.springframework.boot:spring-boot-starter-webflux",
+
+		"org.springframework.kafka:spring-kafka:${springKafkaVersion}",		
 		"org.apache.kafka:kafka-clients:${kafkaVersion}",
 		"org.apache.kafka:kafka-streams:${kafkaVersion}",
 		
