@@ -10,12 +10,16 @@ import org.springframework.kafka.core.StreamsBuilderFactoryBean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import boris.test.avro.domain.Person;
+import boris.test.avro.mdb.domain.MdbPerson;
+import boris.test.avro.mdb.domain.MdbPersonRepository;
+
 @Component
 public class PersonConsumer implements ApplicationRunner {
 
 	@Autowired
-	private KStream<String, GenericRecord> personKStream;
-	// private KStream<String, Person> personKStream;
+//	private KStream<String, GenericRecord> personKStream;
+	 private KStream<String, Person> personKStream;
 
 	@Autowired
 	@Qualifier("&kStreamBuilder")
@@ -23,6 +27,9 @@ public class PersonConsumer implements ApplicationRunner {
 
 	@Autowired
 	private WebClient webClient;
+	
+	@Autowired
+	private MdbPersonRepository mdbPersonRepository;
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
@@ -34,6 +41,9 @@ public class PersonConsumer implements ApplicationRunner {
 			System.out.println("&&&&&&&&&&&&&&&& " + k + ":" + city);
 			webClient.get().uri("/mock/{id}", city).exchange().subscribe(response -> response.bodyToMono(String.class)
 					.subscribe(str -> System.out.println("------ " + str)));
+			
+			mdbPersonRepository.save(new MdbPerson(v));
+			
 		});
 		kStreamBuilderFactoryBean.start();
 	}

@@ -16,5 +16,4 @@ public class MockServerHandler {
 		String id = request.pathVariable("id");
 		return ServerResponse.ok().body(fromObject("response from the mock server: " + id + " " + string.block()));
 	}
-
 }

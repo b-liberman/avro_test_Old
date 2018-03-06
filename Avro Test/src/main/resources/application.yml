@@ -1,6 +1,9 @@
 spring:
   application:
     name: AvroTest
+  data:
+    mongodb:
+      uri: mongodb+srv://boris:qwe321@cluster0-bp4qe.mongodb.net/myFirstDB
 
 avroTest:
   kafka:
