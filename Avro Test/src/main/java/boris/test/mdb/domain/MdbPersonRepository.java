@@ -1,4 +1,4 @@
-package boris.test.avro.mdb.domain;
+package boris.test.mdb.domain;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 

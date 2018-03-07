@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import boris.test.avro.domain.Person;
-import boris.test.avro.mdb.domain.MdbPerson;
-import boris.test.avro.mdb.domain.MdbPersonRepository;
+import boris.test.mdb.domain.MdbPerson;
+import boris.test.mdb.domain.MdbPersonRepository;
 
 @Component
 public class PersonConsumer implements ApplicationRunner {
