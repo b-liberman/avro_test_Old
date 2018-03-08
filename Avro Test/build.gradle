@@ -69,6 +69,7 @@ dependencies {
 		kafkaVersion = '1.0.0'
 		confluentPlatformVersion = '4.0.0'
 		mongoDbDriverVersion = '3.6.3'
+		mongoDbReactiveDriverVersion = '1.7.1'
 		springDataMongoDbVersion = '2.0.4.RELEASE'
 	}
 
@@ -86,7 +87,8 @@ dependencies {
 		
 		"org.springframework.boot:spring-boot-starter-data-mongodb",
 		"org.springframework.data:spring-data-mongodb:${springDataMongoDbVersion}",
-		"org.mongodb:mongo-java-driver:${mongoDbDriverVersion}",
+//		"org.mongodb:mongo-java-driver:${mongoDbDriverVersion}",
+		"org.mongodb:mongodb-driver-reactivestreams:${mongoDbReactiveDriverVersion}",
 		
 		"log4j:log4j:1.2.17"
 	)

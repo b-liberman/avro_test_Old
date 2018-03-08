@@ -42,7 +42,7 @@ public class PersonConsumer implements ApplicationRunner {
 			webClient.get().uri("/mock/{id}", city).exchange().subscribe(response -> response.bodyToMono(String.class)
 					.subscribe(str -> System.out.println("------ " + str)));
 			
-			mdbPersonRepository.save(new MdbPerson(v));
+			mdbPersonRepository.insert(new MdbPerson(v)).subscribe(p -> System.out.println("ENTERED RECORD " + p.id));
 			
 		});
 		kStreamBuilderFactoryBean.start();

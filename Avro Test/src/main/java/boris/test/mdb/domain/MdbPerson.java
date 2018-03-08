@@ -1,9 +1,11 @@
 package boris.test.mdb.domain;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import boris.test.avro.domain.Person;
 
+@Document(collection = "TestPersons")
 public class MdbPerson extends Person {
 
 	@Id
