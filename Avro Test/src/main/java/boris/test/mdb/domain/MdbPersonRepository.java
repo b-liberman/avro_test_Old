@@ -5,5 +5,6 @@ import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import reactor.core.publisher.Flux;
 
 public interface MdbPersonRepository extends ReactiveMongoRepository<MdbPerson, String> {
-	Flux<MdbPerson> findByAgeGreaterThanEqual(int age);	
+	Flux<MdbPerson> findByAgeGreaterThanEqual(int age);
+	Flux<MdbPerson> findByAddressStreetaddress(String street);
 }

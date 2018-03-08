@@ -20,8 +20,8 @@ public class MockServerHandler {
 		Mono<String> string = request.bodyToMono(String.class);
 		String id = request.pathVariable("id");
 
-		mdbPersonRepository.findByAgeGreaterThanEqual(35).count()
-				.subscribe(l -> System.out.println("SERVER: FOUND " + l + "ENTRIES"));
+		mdbPersonRepository.findByAddressStreetaddress("street123").count()
+				.subscribe(l -> System.out.println("SERVER: FOUND " + l + " ENTRIES"));
 
 		return ServerResponse.ok().body(fromObject("response from the mock server: " + id + " " + string.block()));
 	}
