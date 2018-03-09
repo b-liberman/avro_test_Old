@@ -40,6 +40,6 @@ public class MockServerVerticle extends AbstractVerticle {
 					.subscribe(l -> log.debug(": FOUND " + l + " ENTRIES"));
 			rc.response().end("response form V-Server: processed the body: \n" + body);
 		});
-		httpServer.requestHandler(router::accept).listen(MockServer.PORT, ar -> startFuture.complete());
+		httpServer.requestHandler(router::accept).rxListen(MockServer.PORT).subscribe(hs -> startFuture.complete());
 	}
 }
