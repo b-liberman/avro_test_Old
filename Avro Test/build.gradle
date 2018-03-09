@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '2.0.0.BUILD-SNAPSHOT'
+		springBootVersion = '2.0.1.BUILD-SNAPSHOT'
 		avroPluginVersion = '0.9.1'
 	}
 	repositories {
@@ -71,6 +71,9 @@ dependencies {
 		mongoDbDriverVersion = '3.6.3'
 		mongoDbReactiveDriverVersion = '1.7.1'
 		springDataMongoDbVersion = '2.0.4.RELEASE'
+		
+		vertxVersion = '3.5.1'
+		
 	}
 
 	compile (
@@ -90,7 +93,10 @@ dependencies {
 //		"org.mongodb:mongo-java-driver:${mongoDbDriverVersion}",
 		"org.mongodb:mongodb-driver-reactivestreams:${mongoDbReactiveDriverVersion}",
 		
-		"log4j:log4j:1.2.17"
+		"log4j:log4j:1.2.17",
+		
+		"io.vertx:vertx-web:${vertxVersion}",
+		"io.vertx:vertx-rx-java2:${vertxVersion}"
 	)
 	
 	

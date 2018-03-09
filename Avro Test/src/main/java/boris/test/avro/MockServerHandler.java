@@ -1,7 +1,10 @@
 package boris.test.avro;
 
 import static org.springframework.web.reactive.function.BodyInserters.fromObject;
+import static org.springframework.web.reactive.function.BodyExtractors.toMono;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -15,14 +18,29 @@ public class MockServerHandler {
 
 	@Autowired
 	private MdbPersonRepository mdbPersonRepository;
+	
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	public Mono<ServerResponse> getMockResponse(ServerRequest request) {
-		Mono<String> string = request.bodyToMono(String.class);
 		String id = request.pathVariable("id");
 
 		mdbPersonRepository.findByAddressStreetaddress("street123").count()
-				.subscribe(l -> System.out.println("SERVER: FOUND " + l + " ENTRIES"));
+				.subscribe(l -> log.debug("FOUND " + l + " ENTRIES"));
 
-		return ServerResponse.ok().body(fromObject("response from the mock server: " + id + " " + string.block()));
+		return ServerResponse.ok().body(fromObject("response from the mock server: " + id));
+	}
+
+	public Mono<ServerResponse> postMockResponse(ServerRequest request) {
+		log.debug("getting request body");
+		String requestBody = "LA LA LA LA";
+		request.body(toMono(String.class)).subscribe(str -> log.debug(str));
+		log.debug("request body is: " + requestBody);
+		String id = request.pathVariable("id");
+
+		mdbPersonRepository.findByAddressStreetaddress("street123").count()
+				.subscribe(l -> log.debug(": FOUND " + l + " ENTRIES"));
+
+		return ServerResponse.ok()
+				.body(fromObject("response from the mock server: " + id + "\n" + requestBody));
 	}
 }

@@ -9,6 +9,8 @@ import org.apache.avro.io.EncoderFactory;
 import org.apache.avro.io.JsonEncoder;
 import org.apache.avro.specific.SpecificDatumWriter;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -21,17 +23,20 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 import boris.test.avro.domain.AddressUSRecord;
 import boris.test.avro.domain.Person;
 
-@Component
+//@Component
 public class PersonProducer {
 
 	@Autowired
 	private KafkaTemplate<String, Person> kafkaPersonTemplate;
+	
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Value("${avroTest.kafka.topic}")
 	private String topic;
 
 	@Scheduled(fixedDelay = 3000)
 	private void producePersonRecord() {
+		
 		Person person = Person.newBuilder().setAge(35).setName("name123").setTags(Arrays.asList("t1", "t2", "t3"))
 				.setOptField("my opt opt opt")
 				.setAddress(AddressUSRecord.newBuilder().build())
@@ -46,7 +51,7 @@ public class PersonProducer {
 
 			@Override
 			public void onSuccess(SendResult<String, Person> result) {
-				System.out.println("SUCCESS " + result.getProducerRecord().key());
+				log.debug("SUCCESS " + result.getProducerRecord().key());
 			}
 
 			@Override

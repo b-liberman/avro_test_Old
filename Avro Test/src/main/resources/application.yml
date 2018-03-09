@@ -5,6 +5,10 @@ spring:
     mongodb:
       uri: mongodb+srv://boris:qwe321@cluster0-bp4qe.mongodb.net/myFirstDB
 
+logging:
+  level:
+    boris: DEBUG
+
 avroTest:
   kafka:
     bootstrapServers: localhost:29092
