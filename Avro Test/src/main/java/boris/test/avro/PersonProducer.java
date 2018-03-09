@@ -23,7 +23,7 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 import boris.test.avro.domain.AddressUSRecord;
 import boris.test.avro.domain.Person;
 
-//@Component
+@Component
 public class PersonProducer {
 
 	@Autowired
