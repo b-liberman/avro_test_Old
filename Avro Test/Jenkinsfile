@@ -5,7 +5,7 @@ pipeline {
         	steps {
 	    	    echo 'Starting pipeline'
 	    	    echo 'Starting pipeline Again'
-	    	    git url 'https://github.com/b-liberman/avro_test.git'
+	    	    git url: 'https://github.com/b-liberman/avro_test.git'
     	    }
         }
     }
