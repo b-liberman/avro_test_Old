@@ -49,10 +49,10 @@ public class PersonConsumer implements ApplicationRunner {
 //			webClient.get().uri("/mock/{id}", city).exchange().subscribe(response -> response.bodyToMono(String.class)
 //					.subscribe(str -> System.out.println("------ " + str)));
 			webClient.post().uri("/mock/{id}", city).
-			body(fromObject(v.toString())).
-			exchange().
-			subscribe(response -> response.bodyToMono(String.class)
-					.subscribe(str -> log.debug(str)));
+				body(fromObject(v.toString())).
+				exchange().
+				subscribe(response -> response.bodyToMono(String.class)
+						.subscribe(str -> log.debug(str)));
 			
 			mdbPersonRepository.insert(new MdbPerson(v)).subscribe(p -> log.debug("ENTERED RECORD " + p.id));
 			

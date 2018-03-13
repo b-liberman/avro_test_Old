@@ -38,6 +38,13 @@ public class MockServerVerticle extends AbstractVerticle {
 			log.debug("body: " + body);
 			mdbPersonRepository.findByAddressStreetaddress("street123").count()
 					.subscribe(l -> log.debug(": FOUND " + l + " ENTRIES"));
+			
+			mdbPersonRepository.aggregate(36, 43).subscribe(aggr -> {
+				System.out.println("\n===================================");
+				System.out.println(aggr.getAge() + ":" + aggr.getCities() + ":" + aggr.getCount());
+				System.out.println("\n===================================");
+			});
+			
 			rc.response().end("response form V-Server: processed the body: \n" + body);
 		});
 		httpServer.requestHandler(router::accept).rxListen(MockServer.PORT).subscribe(hs -> startFuture.complete());
