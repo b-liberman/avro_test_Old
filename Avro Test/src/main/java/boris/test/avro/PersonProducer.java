@@ -41,7 +41,7 @@ public class PersonProducer {
 	@Autowired
 	private Map<Integer, String> entryKeys;
 
-	@Scheduled(fixedDelay = 5000, initialDelay=3000)
+	@Scheduled(fixedDelay = 3000)
 	private void producePersonRecord() {
 
 		String key = entryKeys.get(ThreadLocalRandom.current().nextInt(0, 6));

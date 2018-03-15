@@ -80,6 +80,7 @@ public class PersonConsumer implements ApplicationRunner {
 		}, Materialized.<String, Person, KeyValueStore<Bytes, byte[]>>as(AGGREGATED_AGE_PERSON_STORE)
 				.withKeySerde(Serdes.String()).withValueSerde(valueSerde));
 
+		Thread.sleep(4000);
 		kStreamBuilderFactoryBean.start();
 	}
 
@@ -109,7 +110,7 @@ public class PersonConsumer implements ApplicationRunner {
 				store = kafkaStreams.store(AGGREGATED_AGE_PERSON_STORE,
 						QueryableStoreTypes.<String, Person>keyValueStore());
 			} catch (InvalidStateStoreException e) {
-				log.debug("store not initialized yet");
+				log.debug("store not initialized yet: " + e.getMessage());
 				return;
 			}
 		}
