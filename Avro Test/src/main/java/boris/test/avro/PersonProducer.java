@@ -1,8 +1,12 @@
 package boris.test.avro;
 
 import java.io.IOException;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
-import java.util.UUID;
+import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.avro.io.DatumWriter;
 import org.apache.avro.io.EncoderFactory;
@@ -28,24 +32,31 @@ public class PersonProducer {
 
 	@Autowired
 	private KafkaTemplate<String, Person> kafkaPersonTemplate;
-	
+
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Value("${avroTest.kafka.topic}")
 	private String topic;
 
-	@Scheduled(fixedDelay = 3000)
+	@Autowired
+	private Map<Integer, String> entryKeys;
+
+	@Scheduled(fixedDelay = 5000, initialDelay=3000)
 	private void producePersonRecord() {
-		
-		Person person = Person.newBuilder().setAge(35).setName("name123").setTags(Arrays.asList("t1", "t2", "t3"))
+
+		String key = entryKeys.get(ThreadLocalRandom.current().nextInt(0, 6));
+		int age = ThreadLocalRandom.current().nextInt(20, 50);
+		Person person = Person.newBuilder().setAge(age).setName("name:" + age + ":" + key).setTags(Arrays.asList("t1", "t2", "t3"))
 				.setOptField("my opt opt opt")
-				.setAddress(AddressUSRecord.newBuilder().build())
+				// .setAddress(AddressUSRecord.newBuilder().build()).build();
+				.setAddress(AddressUSRecord.newBuilder().setCity("city" + age).setStreetaddress("street" + age).build())
 				.build();
 
-//		logRecord(person);
+		// logRecord(person);
 
 		final ProducerRecord<String, Person> record = new ProducerRecord<String, Person>(topic,
-				"key" + UUID.randomUUID(), person);
+				// "key" + UUID.randomUUID(),
+				key, person);
 		ListenableFuture<SendResult<String, Person>> future = kafkaPersonTemplate.send(record);
 		future.addCallback(new ListenableFutureCallback<SendResult<String, Person>>() {
 

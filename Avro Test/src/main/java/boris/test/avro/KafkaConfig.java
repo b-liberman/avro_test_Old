@@ -2,6 +2,9 @@ package boris.test.avro;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.Serdes;
@@ -70,7 +73,8 @@ public class KafkaConfig {
 		streamsConfiguration.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistry);
 		streamsConfiguration.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
 		streamsConfiguration.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, SpecificAvroSerde.class);
-//		streamsConfiguration.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, GenericAvroSerde.class);
+		// streamsConfiguration.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG,
+		// GenericAvroSerde.class);
 		return streamsConfiguration;
 	}
 
@@ -90,9 +94,18 @@ public class KafkaConfig {
 	public KStream<String, Person> personKStream() throws Exception {
 		return kStreamBuilder().getObject().stream(topic);
 	}
-	
-//	@Bean
-//	public KStream<String, GenericRecord> personKStream() throws Exception {
-//		return  kStreamBuilder().getObject().stream(topic);
-//	}
+
+	@Bean
+	public Map<Integer, String> entryKeys() {
+		return Stream
+				.of(new SimpleEntry<Integer, String>(0, "key0"), new SimpleEntry<Integer, String>(1, "key1"),
+						new SimpleEntry<Integer, String>(2, "key2"), new SimpleEntry<Integer, String>(3, "key3"),
+						new SimpleEntry<Integer, String>(4, "key4"), new SimpleEntry<Integer, String>(5, "key5"))
+				.collect(Collectors.toMap((e) -> e.getKey(), (e) -> e.getValue()));
+	}
+
+	// @Bean
+	// public KStream<String, GenericRecord> personKStream() throws Exception {
+	// return kStreamBuilder().getObject().stream(topic);
+	// }
 }

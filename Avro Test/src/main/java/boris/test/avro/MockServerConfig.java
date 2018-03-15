@@ -17,6 +17,8 @@ public class MockServerConfig {
 //				mockServerHandler::postMockResponse);
 //	}
 	
+	static int PORT = 8082;
+
 	@Bean
 	public Vertx vertx() {
 		return Vertx.vertx();

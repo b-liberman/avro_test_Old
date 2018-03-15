@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import boris.test.avro.domain.Person;
 
-@Document(collection = "TestPersons")
+@Document(collection = "TestPersonsN")
 public class MdbPerson extends Person {
 
 	@Id

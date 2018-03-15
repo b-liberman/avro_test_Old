@@ -10,6 +10,6 @@ public class WebClientConfig {
 
 	@Bean
 	public WebClient mockWebClient() {
-		return WebClient.create("http://localhost:" + MockServer.PORT);
+		return WebClient.create("http://localhost:" + MockServerConfig.PORT);
 	}
 }
