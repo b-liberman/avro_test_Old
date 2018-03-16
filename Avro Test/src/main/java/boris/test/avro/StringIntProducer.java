@@ -33,7 +33,7 @@ public class StringIntProducer {
 	private void producePersonRecord() {
 
 		ThreadLocalRandom currentTlr = ThreadLocalRandom.current();
-		String key = entryStringKeys.get(currentTlr.nextInt(0, 4)) + ":ba" + currentTlr.nextInt(1, 3);
+		String key = entryStringKeys.get(currentTlr.nextInt(0, 4)) + ":ba" + currentTlr.nextInt(1, 5);
 		int intValue = currentTlr.nextInt(0, 5);
 
 		final ProducerRecord<String, Integer> record = new ProducerRecord<String, Integer>(topic, key, intValue);

@@ -52,7 +52,7 @@ public class StringIntConsumer implements ApplicationRunner {
 
 		// reduce to just the last entry per back end
 		final KTable<String, Integer> lastResultsKTable = rhStream.groupByKey().reduce((aggr, v) -> v,
-				Materialized.<String, Integer, KeyValueStore<Bytes, byte[]>>as(LAST_RH_RESULTS_STORE));
+				Materialized.<String, Integer, KeyValueStore<Bytes, byte[]>>as(LAST_RH_RESULTS_STORE).withCachingDisabled());
 
 		lastResultsKTable.toStream().foreach((k, v) -> {
 			log.debug("FROM RH LAST RESULT TABLE: " + k + ":" + v);
