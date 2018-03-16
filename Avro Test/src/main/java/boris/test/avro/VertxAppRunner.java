@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import io.vertx.reactivex.core.RxHelper;
 import io.vertx.reactivex.core.Vertx;
 
-@Component
+//@Component
 public class VertxAppRunner implements ApplicationRunner {
 
 	@Autowired

@@ -72,7 +72,7 @@ dependencies {
 
 	ext {
 		springKafkaVersion = '2.1.3.BUILD-SNAPSHOT'
-		kafkaVersion = '1.0.0'
+		kafkaVersion = '1.0.1'
 		confluentPlatformVersion = '4.0.0'
 		mongoDbDriverVersion = '3.6.3'
 		mongoDbReactiveDriverVersion = '1.7.1'

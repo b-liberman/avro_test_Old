@@ -15,8 +15,10 @@ server:
 avroTest:
   kafka:
     bootstrapServers: localhost:29092
-    zkServers: localhost:32181
+#   zkServers: localhost:32181
     schemaRegistry: http://localhost:8081
-    topic: borisTest
+    stringPersonTopic: borisTestStringPerson
+    baStringIntTopic: borisTestStringIntBA
+    rhStringIntTopic: borisTestStringIntRH
     streams:
       applicationId: avroTest1

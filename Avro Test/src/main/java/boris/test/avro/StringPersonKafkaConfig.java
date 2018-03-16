@@ -27,13 +27,10 @@ import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
 
 @Configuration
 @EnableKafka
-public class KafkaConfig {
+public class StringPersonKafkaConfig {
 
 	@Value("${avroTest.kafka.bootstrapServers}")
 	private String kafkaBootstrapServers;
-
-	@Value("${avroTest.kafka.zkServers}")
-	private String zookeeperServers;
 
 	@Value("${avroTest.kafka.schemaRegistry}")
 	private String schemaRegistry;
@@ -41,14 +38,14 @@ public class KafkaConfig {
 	@Value("${avroTest.kafka.streams.applicationId}")
 	private String streamsApplicationId;
 
-	@Value("${avroTest.kafka.topic}")
-	private String topic;
+	@Value("${avroTest.kafka.stringPersonTopic}")
+	private String stringPersonTopic;
 
 	@Bean
-	public Map<String, Object> producerConfigs() {
+	public Map<String, Object> stringPersonProducerConfigs() {
 		Map<String, Object> producerProps = new HashMap<>();
 		producerProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaBootstrapServers);
-		producerProps.put(ProducerConfig.CLIENT_ID_CONFIG, "AvroProducer");
+		producerProps.put(ProducerConfig.CLIENT_ID_CONFIG, "AvroStringPersonProducer");
 		producerProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 		producerProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
 		producerProps.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistry);
@@ -56,19 +53,19 @@ public class KafkaConfig {
 	}
 
 	@Bean
-	public ProducerFactory<String, Person> personProducerFactory() {
-		return new DefaultKafkaProducerFactory<String, Person>(producerConfigs());
+	public ProducerFactory<String, Person> stringPersonProducerFactory() {
+		return new DefaultKafkaProducerFactory<String, Person>(stringPersonProducerConfigs());
 	}
 
 	@Bean
-	public KafkaTemplate<String, Person> kafkaPersonTemplate() {
-		return new KafkaTemplate<String, Person>(personProducerFactory());
+	public KafkaTemplate<String, Person> kafkaStringPersonTemplate() {
+		return new KafkaTemplate<String, Person>(stringPersonProducerFactory());
 	}
 
 	@Bean
-	public Map<String, Object> streamsConfigs() {
+	public Map<String, Object> streamsStringPersonConfigs() {
 		Map<String, Object> streamsConfiguration = new HashMap<>();
-		streamsConfiguration.put(StreamsConfig.APPLICATION_ID_CONFIG, streamsApplicationId);
+		streamsConfiguration.put(StreamsConfig.APPLICATION_ID_CONFIG, streamsApplicationId +  "StringPerson");
 		streamsConfiguration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaBootstrapServers);
 		streamsConfiguration.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistry);
 		streamsConfiguration.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
@@ -79,20 +76,20 @@ public class KafkaConfig {
 	}
 
 	@Bean
-	public StreamsConfig kStreamsConfigs() {
-		return new StreamsConfig(streamsConfigs());
+	public StreamsConfig kStreamsStringPersonConfigs() {
+		return new StreamsConfig(streamsStringPersonConfigs());
 	}
 
 	@Bean
-	public StreamsBuilderFactoryBean kStreamBuilder() {
-		StreamsBuilderFactoryBean streamsBuilderFactoryBean = new StreamsBuilderFactoryBean(kStreamsConfigs());
+	public StreamsBuilderFactoryBean kStreamStringPersonBuilder() {
+		StreamsBuilderFactoryBean streamsBuilderFactoryBean = new StreamsBuilderFactoryBean(kStreamsStringPersonConfigs());
 		streamsBuilderFactoryBean.setAutoStartup(false);
 		return streamsBuilderFactoryBean;
 	}
 
 	@Bean
-	public KStream<String, Person> personKStream() throws Exception {
-		return kStreamBuilder().getObject().stream(topic);
+	public KStream<String, Person> stringPersonKStream() throws Exception {
+		return kStreamStringPersonBuilder().getObject().stream(stringPersonTopic);
 	}
 
 	@Bean

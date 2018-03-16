@@ -1,12 +1,9 @@
 package boris.test.avro;
 
 import java.io.IOException;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.avro.io.DatumWriter;
 import org.apache.avro.io.EncoderFactory;
@@ -20,22 +17,21 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
 import boris.test.avro.domain.AddressUSRecord;
 import boris.test.avro.domain.Person;
 
-@Component
-public class PersonProducer {
+//@Component
+public class StringPersonProducer {
 
 	@Autowired
-	private KafkaTemplate<String, Person> kafkaPersonTemplate;
+	private KafkaTemplate<String, Person> kafkaStringPersonTemplate;
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	@Value("${avroTest.kafka.topic}")
+	@Value("${avroTest.kafka.baStringIntTopic}")
 	private String topic;
 
 	@Autowired
@@ -57,7 +53,7 @@ public class PersonProducer {
 		final ProducerRecord<String, Person> record = new ProducerRecord<String, Person>(topic,
 				// "key" + UUID.randomUUID(),
 				key, person);
-		ListenableFuture<SendResult<String, Person>> future = kafkaPersonTemplate.send(record);
+		ListenableFuture<SendResult<String, Person>> future = kafkaStringPersonTemplate.send(record);
 		future.addCallback(new ListenableFutureCallback<SendResult<String, Person>>() {
 
 			@Override

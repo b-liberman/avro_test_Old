@@ -24,7 +24,6 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.kafka.core.StreamsBuilderFactoryBean;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import boris.test.avro.domain.Person;
@@ -33,19 +32,19 @@ import boris.test.mdb.domain.MdbPersonRepository;
 import io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig;
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
 
-@Component
-public class PersonConsumer implements ApplicationRunner {
+//@Component
+public class StringPersonConsumer implements ApplicationRunner {
 
 	private static final String AGGREGATED_AGE_PERSON_STORE = "aggregated_age_person_store";
 
 	@Autowired
 	// private KStream<String, GenericRecord> personKStream;
-	private KStream<String, Person> personKStream;
+	private KStream<String, Person> stringPersonKStream;
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	@Qualifier("&kStreamBuilder")
+	@Qualifier("&kStreamStringPersonBuilder")
 	private StreamsBuilderFactoryBean kStreamBuilderFactoryBean;
 
 	@Autowired
@@ -65,16 +64,16 @@ public class PersonConsumer implements ApplicationRunner {
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 
-		personKStream.foreach((k, v) -> {
+		stringPersonKStream.foreach((k, v) -> {
 			handlePerson(k, v);
 		});
 
-		SpecificAvroSerde valueSerde = new SpecificAvroSerde();
+		SpecificAvroSerde<Person> valueSerde = new SpecificAvroSerde<Person>();
 		Map<String, Object> valueSerdeConfig = new HashMap<>();
 		valueSerdeConfig.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistry);
 		valueSerde.configure(valueSerdeConfig, true);
 		
-		personKStream.groupByKey().reduce((aggrAgePerson, person) -> {
+		stringPersonKStream.groupByKey().reduce((aggrAgePerson, person) -> {
 			aggrAgePerson.setAge(aggrAgePerson.getAge() + person.getAge());
 			return aggrAgePerson;
 		}, Materialized.<String, Person, KeyValueStore<Bytes, byte[]>>as(AGGREGATED_AGE_PERSON_STORE)
