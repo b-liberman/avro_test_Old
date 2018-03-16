@@ -50,8 +50,9 @@ public class StringIntConsumer implements ApplicationRunner {
 		streamsBuilder.<String, Integer>stream(baTopic).map((k, v) -> new KeyValue<String, Integer>(k, v + 1))
 				.peek((k, v) -> log.debug("TO RH STREAM: " + k + ":" + v)).to(rhTopic);
 
-		streamsBuilder.<String, Integer>stream(rhTopic).groupByKey()
+		streamsBuilder.<String, Integer>stream(rhTopic)
 				// reduce to just the last entry per back end, i.e. the final result
+				.groupByKey()
 				.reduce((aggr, v) -> v,
 						Materialized.<String, Integer, KeyValueStore<Bytes, byte[]>>as(LAST_RH_RESULTS_STORE)
 								.withCachingDisabled())
@@ -60,16 +61,16 @@ public class StringIntConsumer implements ApplicationRunner {
 					log.debug("FROM RH LAST RESULT TABLE: " + k + ":" + v);
 					String keyPart = k.substring(0, k.indexOf(":"));
 
-					ReadOnlyKeyValueStore<String, Integer> store = getStore();
-					KeyValueIterator<String, Integer> kvIterator = store.all();
+					KeyValueIterator<String, Integer> kvIterator = getStore().range(keyPart, keyPart + "xxxxxxxxxx");
 
+					// here we get all related entries
 					while (kvIterator.hasNext()) {
 						KeyValue<String, Integer> kv = kvIterator.next();
 						if (kv.key.startsWith(keyPart))
 							log.debug("----- RELATED ENTRY " + kv.key + ":" + kv.value);
 					}
+					kvIterator.close();
 				});
-
 		kStreamBuilderFactoryBean.start();
 	}
 
