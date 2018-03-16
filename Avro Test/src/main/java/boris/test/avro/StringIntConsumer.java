@@ -39,6 +39,8 @@ public class StringIntConsumer implements ApplicationRunner {
 	@Value("${avroTest.kafka.rhStringIntTopic}")
 	private String rhTopic;
 
+	private ReadOnlyKeyValueStore<String, Integer> store;
+
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 
@@ -48,64 +50,43 @@ public class StringIntConsumer implements ApplicationRunner {
 		streamsBuilder.<String, Integer>stream(baTopic).map((k, v) -> new KeyValue<String, Integer>(k, v + 1))
 				.peek((k, v) -> log.debug("TO RH STREAM: " + k + ":" + v)).to(rhTopic);
 
-		KStream<String, Integer> rhStream = streamsBuilder.<String, Integer>stream(rhTopic);
+		streamsBuilder.<String, Integer>stream(rhTopic).groupByKey()
+				// reduce to just the last entry per back end, i.e. the final result
+				.reduce((aggr, v) -> v,
+						Materialized.<String, Integer, KeyValueStore<Bytes, byte[]>>as(LAST_RH_RESULTS_STORE)
+								.withCachingDisabled())
+				// process the result by checking all related entries from the other back ends
+				.toStream().foreach((k, v) -> {
+					log.debug("FROM RH LAST RESULT TABLE: " + k + ":" + v);
+					String keyPart = k.substring(0, k.indexOf(":"));
 
-		// reduce to just the last entry per back end
-		final KTable<String, Integer> lastResultsKTable = rhStream.groupByKey().reduce((aggr, v) -> v,
-				Materialized.<String, Integer, KeyValueStore<Bytes, byte[]>>as(LAST_RH_RESULTS_STORE).withCachingDisabled());
+					ReadOnlyKeyValueStore<String, Integer> store = getStore();
+					KeyValueIterator<String, Integer> kvIterator = store.all();
 
-		lastResultsKTable.toStream().foreach((k, v) -> {
-			log.debug("FROM RH LAST RESULT TABLE: " + k + ":" + v);
-			String keyPart = k.substring(0, k.indexOf(":"));
-			log.debug("===== key part is " + keyPart);
-			// lastResultsKTable.filter((k1, v1) -> {
-			// log.debug("========= checking " + k1);
-			// return k1.startsWith(keyPart);
-			// }).toStream().foreach((k2, v2) -> log.debug("----- RELATED ENTRY " + k2 + ":"
-			// + v2));
-			ReadOnlyKeyValueStore<String, Integer> store = getStore();
-			KeyValueIterator<String, Integer> kvIterator = store.all();
-
-			while (kvIterator.hasNext()) {
-				KeyValue<String, Integer> kv = kvIterator.next();
-				if (kv.key.startsWith(keyPart))
-					log.debug("----- RELATED ENTRY " + kv.key + ":" + kv.value);
-			}
-		});
+					while (kvIterator.hasNext()) {
+						KeyValue<String, Integer> kv = kvIterator.next();
+						if (kv.key.startsWith(keyPart))
+							log.debug("----- RELATED ENTRY " + kv.key + ":" + kv.value);
+					}
+				});
 
 		kStreamBuilderFactoryBean.start();
 	}
-
-	private ReadOnlyKeyValueStore<String, Integer> store;
 
 	private ReadOnlyKeyValueStore<String, Integer> getStore() {
 		if (store == null) {
 			try {
 				KafkaStreams kafkaStreams = kStreamBuilderFactoryBean.getKafkaStreams();
 				if (kafkaStreams == null) {
-					return null;
+					throw new IllegalStateException("racing conditions as streams are not initialized yet");
 				}
 				store = kafkaStreams.store(LAST_RH_RESULTS_STORE, QueryableStoreTypes.<String, Integer>keyValueStore());
 			} catch (InvalidStateStoreException e) {
 				log.debug("store not initialized yet: " + e.getMessage());
-				return null;
+				throw new IllegalStateException(
+						"racing conditions as streams are not initialized yet: " + e.getMessage());
 			}
 		}
 		return store;
-	}
-
-	// @Scheduled(fixedDelay = 5000, initialDelay = 3000)
-	private void printStore() {
-
-		ReadOnlyKeyValueStore<String, Integer> store = getStore();
-
-		log.debug("........................");
-		KeyValueIterator<String, Integer> kvIterator = store.all();
-
-		while (kvIterator.hasNext()) {
-			KeyValue<String, Integer> kv = kvIterator.next();
-			log.debug("---" + kv.key + ": " + kv.value);
-		}
-		log.debug("........................");
 	}
 }
