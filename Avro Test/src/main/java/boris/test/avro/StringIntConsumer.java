@@ -66,8 +66,7 @@ public class StringIntConsumer implements ApplicationRunner {
 					// here we get all related entries
 					while (kvIterator.hasNext()) {
 						KeyValue<String, Integer> kv = kvIterator.next();
-						if (kv.key.startsWith(keyPart))
-							log.debug("----- RELATED ENTRY " + kv.key + ":" + kv.value);
+						log.debug("----- RELATED ENTRY " + kv.key + ":" + kv.value);
 					}
 					kvIterator.close();
 				});
