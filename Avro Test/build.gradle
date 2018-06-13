@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '2.0.1.BUILD-SNAPSHOT'
+		springBootVersion = '2.0.3.BUILD-SNAPSHOT'
 		avroPluginVersion = '0.9.1'
 	}
 	repositories {
@@ -71,7 +71,7 @@ eclipse {
 dependencies {
 
 	ext {
-		springKafkaVersion = '2.1.3.BUILD-SNAPSHOT'
+		springKafkaVersion = '2.2.0.BUILD-SNAPSHOT'
 		kafkaVersion = '1.0.1'
 		confluentPlatformVersion = '4.0.0'
 		mongoDbDriverVersion = '3.6.3'
