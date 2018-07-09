@@ -16,7 +16,7 @@ buildscript {
 }
 
 plugins {
-    id 'io.franzbecker.gradle-lombok' version '1.11'
+    id 'io.franzbecker.gradle-lombok' version '1.14'
     id 'java'
     id 'eclipse'
 }
@@ -72,8 +72,8 @@ dependencies {
 
 	ext {
 		springKafkaVersion = '2.2.0.BUILD-SNAPSHOT'
-		kafkaVersion = '1.0.1'
-		confluentPlatformVersion = '4.0.0'
+		kafkaVersion = '1.1.0'
+		confluentPlatformVersion = '4.1.1'
 		mongoDbDriverVersion = '3.6.3'
 		mongoDbReactiveDriverVersion = '1.7.1'
 		springDataMongoDbVersion = '2.0.4.RELEASE'
@@ -86,7 +86,8 @@ dependencies {
 		"org.springframework.boot:spring-boot-starter-actuator",
 		"org.springframework.boot:spring-boot-starter-webflux",
 
-		"org.springframework.kafka:spring-kafka:${springKafkaVersion}",		
+		"org.springframework.kafka:spring-kafka:${springKafkaVersion}",
+		"org.springframework.kafka:spring-kafka-test:${springKafkaVersion}",		
 		"org.apache.kafka:kafka-clients:${kafkaVersion}",
 		"org.apache.kafka:kafka-streams:${kafkaVersion}",
 		
@@ -112,6 +113,6 @@ dependencies {
 }
 
 lombok {
-	version = "1.16.20"
+	version = "1.18.0"
 	sha256 = ""
 }
