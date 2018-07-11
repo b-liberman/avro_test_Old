@@ -10,6 +10,7 @@ node  {
 	jarFileName = 'avro-test'
 	stage('build project') {
 		dir('Avro Test') {
+			echo "./gradlew -PjarFileName=${jarFileName} clean build test"
 	    	sh "./gradlew -PjarFileName=${jarFileName} clean build test"
 	    }
 	}
