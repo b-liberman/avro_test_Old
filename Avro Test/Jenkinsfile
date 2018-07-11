@@ -17,7 +17,7 @@ node  {
 	
 	stage('build docker image') {
 		dir('Avro Test') {
-	    	withEnv(['jarFileName=$jarFileName']) {
+	    	withEnv(['jarFileName="${jarFileName}"']) {
 	    		sh 'printenv'
 	    		app = docker.build("boris/avrotest")
 	    	}
