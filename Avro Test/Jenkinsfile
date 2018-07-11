@@ -13,4 +13,10 @@ node  {
 	    	sh './gradlew clean build test'
 	    }
 	}
+	
+	stage('build docker image') {
+		dir('Avro Test') {
+	    	app = docker.build("boris/avrotest")
+	    }
+	}
 }
