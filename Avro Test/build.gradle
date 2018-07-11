@@ -123,6 +123,6 @@ lombok {
 }
 
 bootJar {
-    baseName = 'avro-test-docker'
+    baseName = ${jarFileName}
     version =  '0.1.0'
 }
