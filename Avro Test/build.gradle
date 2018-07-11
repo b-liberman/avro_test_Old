@@ -121,3 +121,8 @@ lombok {
 	version = "1.18.0"
 	sha256 = ""
 }
+
+bootJar {
+    baseName = 'avro-test-docker'
+    version =  '0.1.0'
+}

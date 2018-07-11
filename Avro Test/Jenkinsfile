@@ -1,17 +1,16 @@
-pipeline {
-    agent any
-    environment {
-    	SPRING_PROFILES_ACTIVE = 'test'
-    }
-    stages {
-        stage('build') {
-        	steps {
-	    	    echo 'Starting pipeline triggered by git'
-	    	    git url: 'https://github.com/b-liberman/avro_test.git'
-	    	    dir('Avro Test') {
-	    	    	sh './gradlew clean build test'
-	    	    }
-    	    }
-        }
-    }
+node  {
+
+	stage('start') {
+		echo 'Starting pipeline triggered by git'
+	}
+	
+	stage('clone repository') {
+		checkout scm
+	}
+	
+	stage('build project') {
+		dir('Avro Test') {
+	    	sh './gradlew clean build test'
+	    }
+	}
 }
