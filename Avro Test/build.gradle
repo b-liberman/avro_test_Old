@@ -123,6 +123,6 @@ lombok {
 }
 
 bootJar {
-    baseName = $jarFileName
+    baseName = project.property('jarFileName')
     version =  '0.1.0'
 }

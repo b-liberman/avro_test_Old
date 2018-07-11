@@ -7,7 +7,7 @@ node  {
 	stage('clone repository') {
 		checkout scm
 	}
-	jarFileName = 'avro-test'
+	jarFileName = 'avro_test'
 	stage('build project') {
 		dir('Avro Test') {
 			echo "./gradlew -PjarFileName=${jarFileName} clean build test"
