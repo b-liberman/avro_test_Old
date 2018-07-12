@@ -6,7 +6,7 @@ node  {
 	
 	stage('clone repository') {
 		def scmVars = checkout scm
-		scmVars.keys.forEach {k -> echo ${k}}
+		scmVars.each {k,v -> echo "${k}:${v}"}
 	}
 	
 	jarFileName = 'avro_test'
