@@ -1,11 +1,12 @@
 node  {
 
 	stage('start') {
-		echo "Starting pipeline triggered by git ${currentBuild.displayName}"
+		echo "Starting pipeline triggered by git"
 	}
 	
 	stage('clone repository') {
-		checkout scm
+		def scmVars = checkout scm
+		echo "get commit message: ${scmVars.GIT_COMMIT}"
 	}
 	
 	jarFileName = 'avro_test'
