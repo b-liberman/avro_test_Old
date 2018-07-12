@@ -26,6 +26,6 @@ node  {
 	}
 	
 	stage('set tag in GIT') {
-    	sh "git tag ${jarFileName}:${jarFileVersion}"
+    	sh "git tag ${jarFileName}/${jarFileVersion}"
 	}
 }
