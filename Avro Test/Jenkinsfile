@@ -6,7 +6,7 @@ node  {
 	
 	stage('clone repository') {
 		def scmVars = checkout scm
-		scmVars.each {k,v -> echo "${k}:${v}"}
+		echo "building ${scmVars.GIT_BRANCH}"
 	}
 	
 	jarFileName = 'avro_test'
@@ -23,5 +23,9 @@ node  {
     	dir('Avro Test') {
     		app = docker.build("boris/avrotest:${currentBuild.number}", "--build-arg jarFileName=${jarFileName} --build-arg jarFileVersion=${jarFileVersion} .")
     	}
+	}
+	
+	stage('set tag in GIT') {
+    	sh "git tag ${jarFileName}:$jarFileVersion}"
 	}
 }
