@@ -1,7 +1,7 @@
 node  {
 
 	stage('start') {
-		echo 'Starting pipeline triggered by git'
+		echo "Starting pipeline triggered by git ${currentBuild.displayName}"
 	}
 	
 	stage('clone repository') {
