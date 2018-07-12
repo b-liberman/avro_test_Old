@@ -7,17 +7,20 @@ node  {
 	stage('clone repository') {
 		checkout scm
 	}
+	
 	jarFileName = 'avro_test'
+	jarFileVersion = '0.0.1'
+	
 	stage('build project') {
 		dir('Avro Test') {
 			echo "./gradlew -PjarFileName=${jarFileName} clean build test"
-	    	sh "./gradlew -PjarFileName=${jarFileName} clean build test"
+	    	sh "./gradlew -PjarFileName=${jarFileName} -PjarFileVersion=${jarFileVersion} clean build test"
 	    }
 	}
 	
 	stage('build docker image') {
 		dir('Avro Test') {
-	    	withEnv(["jarFileName=${jarFileName}XX"]) {
+	    	withEnv(["jarFileName=${jarFileName}", "jarFileVersion=${jarFileVersion}"]) {
 	    		sh 'printenv'
 	    		app = docker.build("boris/avrotest")
 	    	}

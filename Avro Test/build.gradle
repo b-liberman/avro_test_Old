@@ -123,6 +123,6 @@ lombok {
 }
 
 bootJar {
-    baseName = project.property('jarFileName')
-    version =  '0.1.0'
+    baseName = project.findProperty('jarFileName') ?: 'avro_test_local'
+    version =  project.findProperty('jarFileVersion') ?: 'localVersion'
 }
