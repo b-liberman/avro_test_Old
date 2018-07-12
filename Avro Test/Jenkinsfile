@@ -19,6 +19,8 @@ node  {
 	}
 	
 	stage('build docker image') {
+    	dir('Avro Test') {
     		app = docker.build("boris/avrotest", "--build-arg jarFileName=${jarFileName} --build-arg jarFileVersion=${jarFileVersion} .")
+    	}
 	}
 }
