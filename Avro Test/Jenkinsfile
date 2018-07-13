@@ -27,6 +27,6 @@ node  {
 	
 	stage('set tag in GIT') {
     	sh "git tag ${jarFileName}/${jarFileVersion} -m 'automatic jenkins tag'"
-    	sh "git push origin CD_Branch --tags"
+    	sh "git push origin CDX_Branch --tags"
 	}
 }
